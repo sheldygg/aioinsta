@@ -1,3 +1,3 @@
 from .client import InstagramClient
-from .extractors import validate_external_url
+from .enums import MediaType
 from .request import RequestClient

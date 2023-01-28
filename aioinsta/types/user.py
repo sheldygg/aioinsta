@@ -1,9 +1,8 @@
-from pydantic import BaseModel, HttpUrl, validator
+from pydantic import BaseModel, HttpUrl
 from typing import Optional
 
-
 class User(BaseModel):
-    pk: str
+    pk: int
     username: str
     full_name: str
     is_private: bool
@@ -13,7 +12,7 @@ class User(BaseModel):
     media_count: int
     follower_count: int
     following_count: int
-    biography: Optional[str] = None
+    biography: Optional[str] = ""
     external_url: Optional[str]
     account_type: Optional[int]
     is_business: bool
@@ -35,5 +34,3 @@ class User(BaseModel):
     zip: Optional[str]
     instagram_location_id: Optional[str]
     interop_messaging_user_fbid: Optional[str]
-
-    # _external_url = validator('external_url', allow_reuse=True)(validate_external_url)

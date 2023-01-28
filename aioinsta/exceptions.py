@@ -1,0 +1,2 @@
+class InstagramBadRequest(Exception):
+    pass

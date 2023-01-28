@@ -1,8 +1,9 @@
 import json
 
-from .types import Media
-from .extractors import extract_media_gql, excract_url_code
-from .request import RequestClient
+from ..extractors import excract_url_code, extract_media_gql
+from ..request import RequestClient
+from ..types import Media
+
 
 class MediaClient(RequestClient):
     async def media_info_graphql(self, shortcode: str) -> dict:
