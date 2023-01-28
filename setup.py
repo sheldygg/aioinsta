@@ -8,7 +8,7 @@ def get_description():
 
 setuptools.setup(
     name="aioinsta",
-    version="1.0.1",
+    version="1.1",
     license='MIT',
     author="sheldy",
     description="Tool for parse instagram data",
