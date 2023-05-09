@@ -5,7 +5,7 @@ from urllib.parse import urljoin
 from aiohttp import ClientSession
 from aiohttp.client_exceptions import ContentTypeError
 
-from aioinsta import config, login
+from aioinsta import parametrs, login
 from aioinsta.enums import ErrorTypes
 from aioinsta.exceptions import ChallengeRequired, RateLimit
 from aioinsta.helpers import generate_uuid
@@ -56,7 +56,7 @@ class PrivateRequestClient:
 
     def set_user_agent(self, user_agent: str | None = None):
         data = dict(self.login_client.device_settings, locale=self.login_client.locale)
-        self.login_client.user_agent = user_agent or config.USER_AGENT_BASE.format(
+        self.login_client.user_agent = user_agent or parametrs.USER_AGENT_BASE.format(
             **data
         )
         self.login_client.settings["user_agent"] = self.login_client.user_agent
@@ -132,7 +132,7 @@ class PrivateRequestClient:
         params: dict | None = None,
         raise_for_status: bool = False,
     ):
-        url = urljoin(config.API_DOMAIN + "api/v1/", path)
+        url = urljoin(parametrs.API_DOMAIN + "api/v1/", path)
         try:
             response = await self._request(
                 method=method,
@@ -182,7 +182,7 @@ class PublicRequestClient:
         path: str,
         params: dict | None = None,
     ):
-        url = urljoin(config.PUBLIC_API_DOMAIN, path)
+        url = urljoin(parametrs.PUBLIC_API_DOMAIN, path)
         params = params or {}
         params.update({"__a": 1, "__d": "dis"})
         response = await self.public_request(method=method, url=url, params=params)
