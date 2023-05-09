@@ -1,3 +1,5 @@
+import json
+
 from aioinsta.types.media import Media, MediaType, Photo, Resource, Video
 from aioinsta.types.user import User, UserShort
 
@@ -32,8 +34,23 @@ def extract_user_short(data: dict) -> UserShort:
 
 def extract_resource_gql(data: dict) -> Resource:
     media_type = MEDIA_TYPES_GQL[data.get("__typename")]
+    display_url = data.get("display_url")
+    if data.get("is_video", False):
+        photo = None
+        video = Video(
+            url=data.get("video_url"),
+            preview=display_url,
+            view_count=data.get("video_view_count"),
+            duration=data.get("video_duration"),
+        )
+    else:
+        video = None
+        photo = Photo(url=display_url)
     return Resource(
-        pk=data.get("id"), media_type=media_type, url=data.get("display_url")
+        pk=data.get("id"),
+        media_type=media_type,
+        video=video,
+        photo=photo
     )
 
 

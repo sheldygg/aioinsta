@@ -12,21 +12,22 @@ class MediaType(str, Enum):
     Album = "album"
 
 
-class Resource(BaseModel):
-    pk: str
-    media_type: MediaType
-    url: HttpUrl
-
-
 class Video(BaseModel):
     url: HttpUrl
     preview: HttpUrl
     view_count: int
-    duration: float
+    duration: float | None = 0.0
 
 
 class Photo(BaseModel):
     url: HttpUrl
+
+
+class Resource(BaseModel):
+    pk: str
+    media_type: MediaType
+    photo: Photo | None = None
+    video: Video | None = None
 
 
 class Media(BaseModel):
