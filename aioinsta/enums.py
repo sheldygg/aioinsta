@@ -1,9 +1,6 @@
 from enum import Enum
 
 
-class MediaType(str, Enum):
-    VIDEO = "Video"
-    PHOTO = "Photo"
-    IGTV = "IGTV"
-    REEL = "Reel"
-    ALBUM = "Album"
+class ErrorTypes(str, Enum):
+    CHALLENGE_REQUIRED = "checkpoint_challenge_required"
+    RATE_LIMIT_ERROR = "rate_limit_error"

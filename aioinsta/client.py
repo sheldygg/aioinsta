@@ -1,8 +1,9 @@
-from .methods import LoginClient, MediaClient, UserClient
+from aioinsta.login import Login
 
 
-class InstagramClient(MediaClient, LoginClient, UserClient):
-    def __init__(self, settings: dict = {}) -> None:
-        super().__init__()
-        self.settings = settings
-        self.before_start()
+class Client(Login):
+    def __init__(self, settings: dict | None = None):
+        if settings is None:
+            settings = {}
+        super().__init__(settings)
+        self.init()

@@ -1,23 +1,42 @@
 from datetime import datetime
-from typing import List, Optional, Union
+from enum import Enum
 
-from pydantic import BaseModel
+from pydantic import BaseModel, HttpUrl
 
-from .photo import Photo
-from .usershort import UserShort
-from .video import Video
+from aioinsta.types.user import UserShort
+
+
+class MediaType(str, Enum):
+    Video = "video"
+    Photo = "photo"
+    Album = "album"
+
+
+class Resource(BaseModel):
+    pk: str
+    media_type: MediaType
+    url: HttpUrl
+
+
+class Video(BaseModel):
+    url: HttpUrl
+    preview: HttpUrl
+    view_count: int
+    duration: float
+
+
+class Photo(BaseModel):
+    url: HttpUrl
 
 
 class Media(BaseModel):
-    media_type: str
-    thumbnail_url: str
-    photo: Optional[Photo]
-    video: Optional[Video]
+    pk: str
+    id: str
+    code: str
     user: UserShort
+    caption: str
     taken_at: datetime
-    like_count: Optional[int] = None
-    caption: Optional[str] = None
-    album: Optional[List[Union[Photo, Video]]]
-
-    class Config:
-        smart_union = True
+    media_type: MediaType
+    photo: Photo | None = None
+    video: Video | None = None
+    resource: list[Resource]

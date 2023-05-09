@@ -1,0 +1,32 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "aioinsta"
+dynamic = ["version"]
+description = "Tool for parse instagram data"
+readme = "README.md"
+license = "MIT"
+authors = [
+    { name = "sheldy" },
+]
+classifiers = [
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+]
+dependencies = [
+    "aiohttp",
+    "pydantic",
+]
+
+[project.urls]
+Homepage = "https://github.com/sheldygg/aioinsta"
+
+[tool.hatch.version]
+path = "aioinsta/__init__.py"
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/aioinsta",
+]

@@ -1,36 +1,25 @@
 from pydantic import BaseModel, HttpUrl
-from typing import Optional
+
 
 class User(BaseModel):
-    pk: int
+    pk: str
     username: str
     full_name: str
     is_private: bool
     profile_pic_url: HttpUrl
-    profile_pic_url_hd: Optional[HttpUrl]
+    profile_pic_url_hd: HttpUrl | None = None
     is_verified: bool
     media_count: int
     follower_count: int
     following_count: int
-    biography: Optional[str] = ""
-    external_url: Optional[str]
-    account_type: Optional[int]
-    is_business: bool
+    biography: str | None = None
 
-    public_email: Optional[str]
-    contact_phone_number: Optional[str]
-    public_phone_country_code: Optional[str]
-    public_phone_number: Optional[str]
-    business_contact_method: Optional[str]
-    business_category_name: Optional[str]
-    category_name: Optional[str]
-    category: Optional[str]
 
-    address_street: Optional[str]
-    city_id: Optional[str]
-    city_name: Optional[str]
-    latitude: Optional[float]
-    longitude: Optional[float]
-    zip: Optional[str]
-    instagram_location_id: Optional[str]
-    interop_messaging_user_fbid: Optional[str]
+class UserShort(BaseModel):
+    pk: str
+    username: str
+    full_name: str | None = ""
+    profile_pic_url: HttpUrl | None = None
+    profile_pic_url_hd: HttpUrl | None = None
+    is_private: bool | None
+    stories: list = []
