@@ -18,6 +18,7 @@ classifiers = [
 dependencies = [
     "aiohttp",
     "pydantic",
+    "pycryptodomex"
 ]
 
 [project.urls]
