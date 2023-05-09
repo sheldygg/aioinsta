@@ -1,5 +1,3 @@
-import json
-
 from aioinsta.types.media import Media, MediaType, Photo, Resource, Video
 from aioinsta.types.user import User, UserShort
 
@@ -39,17 +37,25 @@ def extract_resource_gql(data: dict) -> Resource:
     )
 
 
+def extract_caption(data: dict) -> str | None:
+    try:
+        caption = (
+            data.get("edge_media_to_caption", {})
+            .get("edges", [])[0]
+            .get("node", {})
+            .get("text")
+        )
+    except (KeyError, IndexError):
+        caption = None
+    return caption
+
+
 def extract_media_gql(data: dict):
     user = extract_user_short(data.get("owner"))
     media_type = MEDIA_TYPES_GQL[data.get("__typename")]
     media_id = data.get("id")
     display_url = data.get("display_url")
-    caption = (
-        data.get("edge_media_to_caption", {})
-        .get("edges", [])[0]
-        .get("node", {})
-        .get("text")
-    )
+    caption = extract_caption(data)
     if data.get("is_video", False):
         photo = None
         video = Video(
@@ -67,7 +73,7 @@ def extract_media_gql(data: dict):
         pk=media_id,
         taken_at=data.get("taken_at_timestamp"),
         user=user,
-        caption=caption or "",
+        caption=caption,
         media_type=media_type,
         video=video,
         photo=photo,

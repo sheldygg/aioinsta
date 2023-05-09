@@ -34,7 +34,7 @@ class Media(BaseModel):
     id: str
     code: str
     user: UserShort
-    caption: str
+    caption: str | None
     taken_at: datetime
     media_type: MediaType
     photo: Photo | None = None
