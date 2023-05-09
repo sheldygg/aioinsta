@@ -30,3 +30,6 @@ path = "aioinsta/__init__.py"
 include = [
     "/aioinsta",
 ]
+
+[tool.isort]
+profile = "black"
