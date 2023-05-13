@@ -7,6 +7,7 @@ from aioinsta.media import MediaClient
 from aioinsta.password import PasswordClient
 from aioinsta.request import PrivateRequestClient, PublicRequestClient
 from aioinsta.user import UserClient
+from aioinsta.exceptions import IncorrectPassword
 
 
 class Login(
@@ -19,6 +20,7 @@ class Login(
 ):
     def __init__(self, settings: dict):
         self.settings: dict = settings
+        self.username = None
         self.user_agent = None
         self.authorization_data = {}
         self.device_settings = None
@@ -121,6 +123,7 @@ class Login(
             return int(user_id)
 
     async def login(self, username: str, password: str):
+        self.username = username
         await self.pre_login_flow()
         enc_password = await self.password_encrypt(password)
         data = {
@@ -140,6 +143,9 @@ class Login(
         loggin_data = await self.private_request(
             method="POST", path="accounts/login/", data=data, raise_for_status=True
         )
+        response = loggin_data.get("response")
+        if response.get("status") == "fail" and response.get("error_title") == "Incorrect password":
+            raise IncorrectPassword("Entered incorrect password, doblecheck please")
         headers = loggin_data.get("headers")
         self.authorization_data = self.parse_authorization(
             headers.get("ig-set-authorization")

@@ -41,14 +41,14 @@ class PrivateRequestClient:
             self.last_response = response
             if raise_for_status and not resp.ok:
                 error_type = response.get("error_type")
+                message = response.get("message")
                 if resp.status == 400:
                     if error_type == ErrorTypes.RATE_LIMIT_ERROR:
                         raise RateLimit(
                             "Please wait a few minutes before you try again."
                         )
-                    elif error_type == ErrorTypes.CHALLENGE_REQUIRED:
+                    elif message == ErrorTypes.CHALLENGE_REQUIRED:
                         raise ChallengeRequired("Challenge Required")
-            self.login_client.mid = response_headers.get("ig-set-x-mid")
             return dict(response=response, headers=response_headers)
 
     async def close(self):
@@ -142,9 +142,9 @@ class PrivateRequestClient:
                 headers=self.base_headers(),
                 raise_for_status=raise_for_status,
             )
+            self.login_client.mid = response.get("headers", {}).get("ig-set-x-mid")
             return response
         except ChallengeRequired:
-            print("yes")
             return await self.login_client.resolve_challenge(self.last_response)
 
 
@@ -185,5 +185,7 @@ class PublicRequestClient:
         url = urljoin(parametrs.PUBLIC_API_DOMAIN, path)
         params = params or {}
         params.update({"__a": 1, "__d": "dis"})
-        response = await self.public_request(method=method, url=url, params=params)
-        return response.get("response").get("graphql")
+        response = (await self.public_request(method=method, url=url, params=params)).get("response")
+        if response.get("message", "") == "Please wait a few minutes before you try again.":
+            raise RateLimit("Please wait a few minutes before you try again.")
+        return response.get("graphql", {})

@@ -1,9 +1,10 @@
 from urllib.parse import urlparse
 
 from aioinsta import login
-from aioinsta.extractors import extract_media_gql
+from aioinsta.extractors import extract_media_gql, extract_media_v1
 from aioinsta.idcodec import InstagramIdCodec
 from aioinsta.types.media import Media
+from aioinsta.exceptions import RateLimit
 
 
 class MediaClient:
@@ -37,7 +38,19 @@ class MediaClient:
         response = await self.login_client.public_a1_request(
             method="GET", path=f"/p/{shortcode}", params=params
         )
+        # raise RateLimit()
         return extract_media_gql(response.get("shortcode_media"))
 
+    async def media_info_v1(self, media_pk: str) -> Media:
+        response = await self.login_client.private_request(
+            method="GET",
+            path=f"media/{media_pk}/info/",
+            raise_for_status=True
+        )
+        return extract_media_v1(response.get("response").get("items", {}).pop())
+
     async def media_info(self, media_pk) -> Media:
-        return await self.media_info_a1(media_pk)
+        try:
+            return await self.media_info_a1(media_pk)
+        except RateLimit:
+            return await self.media_info_v1(media_pk)

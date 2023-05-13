@@ -15,7 +15,7 @@ class MediaType(str, Enum):
 class Video(BaseModel):
     url: HttpUrl
     preview: HttpUrl
-    view_count: int
+    view_count: int | None = 0
     duration: float | None = 0.0
 
 
