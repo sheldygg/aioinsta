@@ -35,7 +35,7 @@ def extract_user_v1(data: dict) -> User:
 
 
 def extract_user_short(data: dict) -> UserShort:
-    return UserShort(**data)
+    return UserShort(pk=data.get("id", data.get("pk")), **data)
 
 
 def extract_resource_gql(data: dict) -> Resource:
