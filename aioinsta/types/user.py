@@ -2,7 +2,7 @@ from pydantic import BaseModel, HttpUrl
 
 
 class User(BaseModel):
-    pk: str
+    pk: str | int
     username: str
     full_name: str
     is_private: bool

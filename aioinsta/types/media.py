@@ -24,7 +24,7 @@ class Photo(BaseModel):
 
 
 class Resource(BaseModel):
-    pk: str
+    pk: str | int
     media_type: MediaType
     photo: Photo | None = None
     video: Video | None = None
