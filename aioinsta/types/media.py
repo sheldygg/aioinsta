@@ -1,7 +1,7 @@
 from datetime import datetime
 from enum import Enum
 
-from pydantic import BaseModel, HttpUrl
+from pydantic import BaseModel
 
 from aioinsta.types.user import UserShort
 
@@ -13,14 +13,14 @@ class MediaType(str, Enum):
 
 
 class Video(BaseModel):
-    url: HttpUrl
-    preview: HttpUrl
+    url: str
+    preview: str
     view_count: int | None = 0
     duration: float | None = 0.0
 
 
 class Photo(BaseModel):
-    url: HttpUrl
+    url: str
 
 
 class Resource(BaseModel):
