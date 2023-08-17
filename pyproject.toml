@@ -17,7 +17,7 @@ classifiers = [
 ]
 dependencies = [
     "aiohttp",
-    "pydantic",
+    "pydantic~=2.2.0",
     "pycryptodomex"
 ]
 

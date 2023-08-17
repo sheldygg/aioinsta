@@ -31,7 +31,7 @@ class Resource(BaseModel):
 
 
 class Media(BaseModel):
-    pk: str
+    pk: str | int
     id: str
     code: str
     user: UserShort

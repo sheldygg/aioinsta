@@ -16,3 +16,7 @@ class IncorrectPassword(AioinstaException):
 
 class ChallengeError(AioinstaException):
     pass
+
+
+class MediaNotFound(AioinstaException):
+    pass

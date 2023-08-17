@@ -22,9 +22,7 @@ class InstagramIdCodec:
         base = len(alphabet)
         strlen = len(shortcode)
         num = 0
-        idx = 0
-        for char in shortcode:
-            power = strlen - (idx + 1)
+        for idx, char in enumerate(shortcode, 1):
+            power = strlen - idx
             num += alphabet.index(char) * (base**power)
-            idx += 1
         return num
