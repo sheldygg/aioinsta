@@ -14,6 +14,12 @@ class UserClient:
         user = extract_user_graphql(response.get("user"))
         return user
 
+    async def user_info_by_id_v1(self, user_id: int):
+        response = (await self.login_client.private_request(
+            method="GET", path=f"users/{user_id}/info"
+        ))["response"]
+        return extract_user_v1(response["user"])
+
     async def user_info_by_username_v1(self, username: str) -> User:
         response = (
             await self.login_client.private_request(
