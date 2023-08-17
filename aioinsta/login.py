@@ -1,3 +1,4 @@
+import re
 import base64
 import json
 
@@ -121,6 +122,16 @@ class Login(
         user_id = self.authorization_data.get("ds_user_id")
         if user_id:
             return int(user_id)
+
+    async def login_by_session_id(self, session_id: str):
+        self.settings["cookies"] = {"sessionid": session_id}
+        self.init()
+        user_id = re.search(r"^\d+", session_id).group()
+        self.authorization_data = {
+            "ds_user_id": user_id,
+            "sessionid": session_id,
+            "should_use_header_over_cookies": True,
+        }
 
     async def login(self, username: str, password: str):
         self.username = username
